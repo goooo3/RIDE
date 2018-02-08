@@ -425,13 +425,21 @@ class Settings(_Section):
 class RideSettings(Settings):
 
     def __init__(self):
-        self._default_path = os.path.join(os.path.dirname(__file__), 'settings.cfg')
+        # DEBUG: See next lines because of cx_Freeze
+        if getattr(sys, 'frozen', False):
+            # The application is frozen
+            datadir = os.path.dirname(sys.executable)
+        else:
+            # The application is not frozen
+            # Change this bit to match where you store your data files:
+            datadir = os.path.dirname(__file__)
+        self._default_path = os.path.join(datadir, 'settings.cfg')
         # print("DEBUG: RideSettings, default_path %s\n" % self._default_path)
         user_path = initialize_settings(self._default_path)
         Settings.__init__(self, user_path)
         self._settings_dir = os.path.dirname(user_path)
         # print("DEBUG: RideSettings, self._settings_dir %s\n" % self._settings_dir)
-        self.set('install root', os.path.dirname(os.path.dirname(__file__)))
+        self.set('install root', os.path.dirname(datadir))
 
     def get_path(self, *parts):
         """Returns path which combines settings directory and given parts."""

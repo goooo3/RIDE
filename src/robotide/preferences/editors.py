@@ -15,6 +15,7 @@
 import wx
 from wx.lib.masked import NumCtrl
 from os.path import abspath, dirname, join
+import sys
 
 from robotide.preferences import widgets
 from robotide.widgets import Label
@@ -118,7 +119,16 @@ class TextEditorPreferences(EditorPreferences):
         return defaults
 
     def _get_path(self):
-        return join(dirname(abspath(__file__)), 'settings.cfg')
+        # DEBUG: See next lines because of cx_Freeze
+        if getattr(sys, 'frozen', False):
+            # The application is frozen
+            datadir = dirname(sys.executable)
+        else:
+            # The application is not frozen
+            # Change this bit to match where you store your data files:
+            datadir = dirname(__file__)
+        # DEBUG was dirname(abspath(__file__))
+        return join(datadir, 'settings.cfg')
 
 
 class GridEditorPreferences(EditorPreferences):

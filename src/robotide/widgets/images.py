@@ -14,6 +14,7 @@
 
 import wx
 import os
+import sys
 
 
 class ImageList(wx.ImageList):
@@ -26,7 +27,15 @@ class ImageList(wx.ImageList):
 
 
 class ImageProvider(object):
-    _BASE = os.path.dirname(__file__)
+    # DEBUG: See next lines because of cx_Freeze
+    if getattr(sys, 'frozen', False):
+        # The application is frozen
+        datadir = os.path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = os.path.dirname(__file__)
+    _BASE = datadir
 
     def __init__(self, size=(16, 16)):
         self._size = size

@@ -172,6 +172,13 @@ class _ActionHandler(wx.Window):
 class _CanBeRenamed(object):
 
     def OnRename(self, event):
+        # Fix #1571  # DEBUG
+        # print(type(self._node))
+        # node.CheckItem(False)
+        node = event.__repr__()
+        print("DEBUG: OnRename() %s" % node)
+        # self._tree._controller.select(self._node, False)
+        # self._tree.DeselectTests(self._node)
         self._tree.label_editor.OnLabelEdit()
 
     def begin_label_edit(self):

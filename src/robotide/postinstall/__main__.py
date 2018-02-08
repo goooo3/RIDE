@@ -127,7 +127,16 @@ def _create_desktop_shortcut_linux(frame=None):
         if not option_q and not option_f:
             if not _askyesno("Setup", "Create desktop shortcut?", frame):
                 return False
-        roboticon = os.path.dirname(os.path.realpath(__file__)).\
+        # DEBUG: See next lines because of cx_Freeze
+        if getattr(sys, 'frozen', False):
+            # The application is frozen
+            datadir = os.path.dirname(sys.executable)
+        else:
+            # The application is not frozen
+            # Change this bit to match where you store your data files:
+            datadir = os.path.dirname(__file__)
+        # os.path.dirname(os.path.realpath(__file__))
+        roboticon = datadir.\
             replace("postinstall", "widgets/robot.png")
         with open(link, "w+") as shortcut:
             shortcut.write("#!/usr/bin/env xdg-open\n[Desktop Entry]\nExec=\

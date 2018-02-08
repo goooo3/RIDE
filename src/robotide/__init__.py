@@ -34,6 +34,7 @@ import os
 from string import Template
 from robotide.utils import basestring, unicode
 
+
 errorMessageTemplate = Template("""$reason
 You need to install wxPython 2.8.12.1 with unicode support to run RIDE.
 wxPython 2.8.12.1 can be downloaded from http://sourceforge.net/projects/wxpyt\
@@ -60,9 +61,18 @@ PY2 = sys.version_info[0] == 2
 PY3 = not PY2
 
 # Insert bundled robot to path before anything else
-sys.path.append(os.path.join(os.path.dirname(__file__), 'spec'))
-sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
-
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'spec'))
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
+# DEBUG: See next lines because of cx_Freeze
+if getattr(sys, 'frozen', False):
+    # The application is frozen
+    datadir = os.path.dirname(sys.executable)
+else:
+    # The application is not frozen
+    # Change this bit to match where you store your data files:
+    datadir = os.path.dirname(__file__)
+sys.path.append(os.path.join(datadir, 'spec'))
+sys.path.append(os.path.join(datadir, 'lib'))
 
 def main(*args):
     noupdatecheck, debug_console, inpath = _parse_args(args)

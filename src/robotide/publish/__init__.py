@@ -118,11 +118,20 @@ the `robotide.pluginapi` module and plugins should import them there.
 
 
 import os
+import sys
 
 from .messages import *
 from .publisher import PUBLISHER
 
 
 def get_html_message(name):
+    # DEBUG: See next lines because of cx_Freeze
+    if getattr(sys, 'frozen', False):
+        # The application is frozen
+        datadir = os.path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = os.path.dirname(__file__)
     return open(os.path.join(
-        os.path.dirname(__file__), 'htmlmessages', '{}.html'.format(name))).read()
+        datadir, 'htmlmessages', '{}.html'.format(name))).read()

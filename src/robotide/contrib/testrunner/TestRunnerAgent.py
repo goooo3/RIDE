@@ -68,8 +68,16 @@ except ImportError:#py3
         raise e
 
 try:
+    # DEBUG: See next lines because of cx_Freeze
+    if getattr(sys, 'frozen', False):
+        # The application is frozen
+        datadir = os.path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = os.path.dirname(__file__)
     # to find robot (we use provided lib)
-    sys.path.append(os.path.join(os.path.dirname(__file__), '../../lib'))
+    sys.path.append(os.path.join(datadir, '../../lib'))
     from robot.errors import ExecutionFailed
     from robot.running import EXECUTION_CONTEXTS
     from robot.running.signalhandler import STOP_SIGNAL_MONITOR

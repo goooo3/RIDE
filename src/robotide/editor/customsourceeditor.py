@@ -901,7 +901,16 @@ _platformNames = ["wxMSW", "wxGTK", "wxMac"]
 
 if __name__ == '__main__' and __package__ is None:
     from os import sys, path
-    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+    # DEBUG: See next lines because of cx_Freeze
+    if getattr(sys, 'frozen', False):
+        # The application is frozen
+        datadir = path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = path.dirname(__file__)
+    # DEBUG was path.dirname(path.abspath(__file__)
+    sys.path.append(path.dirname(datadir)))
     __name__ = 'Editor'
     app = wx.App()
     frame = wx.Frame(None)

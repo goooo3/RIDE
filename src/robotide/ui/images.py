@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 import os
+import sys
 import wx
 from robotide.controller.settingcontrollers import VariableController
 from robotide.controller.macrocontrollers import TestCaseController, UserKeywordController
@@ -20,7 +21,15 @@ from robotide.controller.filecontrollers import TestDataDirectoryController, Tes
 
 
 _SIZE = (16, 16)
-_BASE = os.path.join(os.path.dirname(__file__), '..', 'widgets')
+# DEBUG: See next lines because of cx_Freeze
+if getattr(sys, 'frozen', False):
+    # The application is frozen
+    datadir = os.path.dirname(sys.executable)
+else:
+    # The application is not frozen
+    # Change this bit to match where you store your data files:
+    datadir = os.path.dirname(__file__)
+_BASE = os.path.join(datadir, '..', 'widgets')
 
 ROBOT_IMAGE_INDEX = 3
 RUNNING_IMAGE_INDEX = 7

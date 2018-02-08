@@ -177,6 +177,9 @@ class TestSelectionController(object):
         return not bool(self._tests)
 
     def is_test_selected(self, test):
+        # DEBUG
+        print("DEBUG is test selected: %s == %s\n keys %s" % (
+            test.longname in self._tests.keys(), self._tests.keys(), self._tests))
         return test.longname in self._tests.keys()
 
     def clear_all(self, message=None):
@@ -191,6 +194,8 @@ class TestSelectionController(object):
         if selected:
             self._tests[test.longname] = test
         elif self.is_test_selected(test):
+            # DEBUG
+            print("DEBUG del test from list: %s == %s" % (str(test), str(self._tests[test.longname])))
             del self._tests[test.longname]
         self.send_selection_changed_message()
 
