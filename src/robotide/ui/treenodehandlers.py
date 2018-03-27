@@ -17,7 +17,7 @@ import wx
 from robotide.controller.ctrlcommands import (
     RenameKeywordOccurrences, RemoveMacro, AddKeyword, AddTestCase, RenameTest,
     CopyMacroAs, AddVariable, UpdateVariableName, RenameFile, DeleteItem,
-    RenameResourceFile, DeleteFile, SortKeywords, Include, Exclude
+    RenameResourceFile, DeleteFile, SortKeywords, Include, Exclude,
     RemoveReadOnly)
 from robotide.controller.settingcontrollers import VariableController
 from robotide.controller.macrocontrollers import (
