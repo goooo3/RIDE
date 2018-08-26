@@ -42,7 +42,7 @@ class PythonArgumentParser(_ArgumentParser):
 
     def _get_arg_spec(self, handler):
         if PY2:
-        args, varargs, kwargs, defaults = inspect.getargspec(handler)
+            args, varargs, kwargs, defaults = inspect.getargspec(handler)
         else:
             args, varargs, kwargs, defaults, _, _, _ = inspect.getfullargspec(handler)
         if inspect.ismethod(handler) or handler.__name__ == '__init__':

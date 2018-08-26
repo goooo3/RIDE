@@ -3088,7 +3088,7 @@ class _Misc(_BuiltInBase):
         if not is_unicode(new):
             new = unic(new)
         if not (is_truthy(append) and old):
-        return new
+            return new
         if handle_html:
             if new.startswith('*HTML*'):
                 new = new[6:].lstrip()
