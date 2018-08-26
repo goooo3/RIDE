@@ -22,8 +22,8 @@ except ImportError:
     get_java_property = lambda name: None
     get_java_properties = lambda: {}
 
-from robot.errors import DataError, VariableError
-from robot.utils import (get_env_var, get_env_vars, get_error_message,
+from robotide.lib.robot.errors import DataError, VariableError
+from robotide.lib.robot.utils import (get_env_var, get_env_vars, get_error_message,
                          is_dict_like, is_list_like, normalize, DotDict,
                          NormalizedDict)
 
@@ -64,11 +64,14 @@ class VariableFinder(object):
             if not is_list_like(value):
                 raise VariableError("Value of variable '%s' is not list or "
                                     "list-like." % name)
+            # TODO: Is converting to list needed or would checking be enough?
+            # TODO: Check this and DotDict usage below in RF 3.1.
             return list(value)
         if identifier == '&':
             if not is_dict_like(value):
                 raise VariableError("Value of variable '%s' is not dictionary "
                                     "or dictionary-like." % name)
+            # TODO: Is converting to DotDict needed? Check in RF 3.1.
             return DotDict(value)
         return value
 

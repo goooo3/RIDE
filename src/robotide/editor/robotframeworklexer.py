@@ -15,12 +15,11 @@
 import re
 
 try:
-    import pygments
-except ImportError as e:
-    print("Please install Pygments (i.e.: pip install Pygments)\n\n\n")
-    exit
 from pygments.lexer import Lexer
 from pygments.token import Token
+except Exception:
+    raise(ImportError)
+
 from robotide.utils import unicode, is_string, py2to3
 
 HEADING = Token.Generic.Heading

@@ -13,9 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from robot import utils
-from robot.errors import DataError
-from robot.model import Tags
+from robotide.lib.robot import utils
+from robotide.lib.robot.errors import DataError
+from robotide.lib.robot.model import Tags
 
 from .arguments import (ArgumentSpec, DynamicArgumentParser,
                         JavaArgumentCoercer, JavaArgumentParser,

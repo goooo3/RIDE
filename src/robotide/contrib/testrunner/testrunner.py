@@ -50,7 +50,7 @@ from robotide.robotapi import LOG_LEVELS
 from robotide.context import IS_WINDOWS
 from robotide.contrib.testrunner import TestRunnerAgent
 from robotide.controller.testexecutionresults import TestExecutionResults
-from robotide.utils import PY2 # , unicode
+from robotide.utils import PY2, is_unicode # , unicode
 try:
     from robotide.lib.robot.utils import encoding
 except ImportError:
@@ -75,6 +75,8 @@ class TestRunner(object):
         self.port = None
         self._project = project
         self.profiles = {}
+        self._pause_longname = None
+        self._pause_testname = None
 
     def enable(self, result_handler):
         self._start_listener_server(result_handler)
@@ -116,6 +118,7 @@ class TestRunner(object):
         self.port = self._server.server_address[1]
 
     def _result_handler(self, event, *args):
+        # print("DEBUG: testrunner event %s" % event)
         if event == 'pid':
             self._pid_to_kill = int(args[0])
         if event == 'port' and self._process:
@@ -125,6 +128,18 @@ class TestRunner(object):
             testname = args[0]
             self._results.set_running(self._get_test_controller(longname,
                                                                 testname))
+            self._pause_longname = longname
+            self._pause_testname = testname
+
+        if event == 'continue':
+            # print("DEBUG: testrunner resume %s" % self._results.RUNNING)
+            self._results.set_running(self._get_test_controller(
+                self._pause_longname, self._pause_testname))
+
+        if event == 'paused':
+            # print("DEBUG: testrunner pause %s" % self._results.PAUSED)
+            self._results.set_paused(self._get_test_controller(
+                self._pause_longname, self._pause_testname))
         if event == 'end_test':
             longname = args[1]['longname']
             testname = args[0]
@@ -259,18 +274,32 @@ class TestRunner(object):
 
     @staticmethod
     def _write_argfile(argfile, args):
-        f = codecs.open(argfile, "wb", "utf-8")
+        m_args = list()
+        f = codecs.open(argfile, "wb")  # , "utf-8")
         if PY2:
             # if IS_WINDOWS:
             #    m_args = [unicode(item,"utf-8") for item in args]
             #else:
-            m_args = args
-            # m_args = [item.decode("utf-8") for item in args]
+            # DEBUG 
+            # m_args = args
+            for item in args:
+                if is_unicode(item):
+                   m_args.append(item.encode("utf-8"))  # .decode("utf-8"))
+                else:
+                   m_args.append(bytes(item))
+            # DEBUG m_args = [item.decode("utf-8") for item in args]
+            # print("DEBUG: write_args: %s\n" % m_args)
         else:
-            m_args = [str(x) for x in args]
+            m_args = [str(x) for x in args]  # .encode("utf-8","surrogate")
         # print("DEBUG: write_args: %s\n" % m_args)
-        data = "\n".join(m_args)
-        f.write(data)  # DEBUG .decode("utf-8")
+        # data = r"\n".join(m_args)
+        if PY2:
+            data = b"\n".join(m_args)
+            f.write(bytes(data))  # DEBUG .decode("utf-8") .encode("utf-8")
+        else:
+            data = "\n".join(m_args)
+            f.write(bytes(data.encode("utf-8",
+                                      "surrogate")))
         f.close()
 
     def get_output_and_errors(self, profile):

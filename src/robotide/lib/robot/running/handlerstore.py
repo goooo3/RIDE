@@ -15,8 +15,8 @@
 
 from operator import attrgetter
 
-from robot.errors import DataError, KeywordError
-from robot.utils import NormalizedDict
+from robotide.lib.robot.errors import DataError, KeywordError
+from robotide.lib.robot.utils import NormalizedDict
 
 from .usererrorhandler import UserErrorHandler
 
@@ -78,7 +78,7 @@ class HandlerStore(object):
             source = "%s '%s'" % (self.source_type, self.source)
         if not found:
             raise KeywordError("%s contains no keywords matching name '%s'."
-                                % (source, name))
+                            % (source, name))
         error = ["%s contains multiple keywords matching name '%s':"
                  % (source, name)]
         names = sorted(handler.name for handler in found)

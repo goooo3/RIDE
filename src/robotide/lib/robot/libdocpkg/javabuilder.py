@@ -15,8 +15,8 @@
 
 import sys
 
-from robot.errors import DataError
-from robot import utils
+from robotide.lib.robot.errors import DataError
+from robotide.lib.robot import utils
 
 from .model import LibraryDoc, KeywordDoc
 

@@ -28,9 +28,9 @@ programmatic usage as follows:
   * :mod:`~robot.testdoc`: Module for test case documentation generation.
   * :mod:`~robot.tidy`: Module for test data clean-up and format change.
 
-All the functions above can be imported like ``from robot import run``.
+All the functions above can be imported like ``from robotide.lib.robot import run``.
 Functions and classes provided by the modules need to be imported like
-``from robot.libdoc import libdoc_cli``.
+``from robotide.lib.robot.libdoc import libdoc_cli``.
 
 The functions and modules listed above are considered stable. Other modules in
 this package are for for internal usage and may change without prior notice.
@@ -39,14 +39,11 @@ this package are for for internal usage and may change without prior notice.
 """
 
 import sys
-# required when not installed
-import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import warnings
 
-from robot.rebot import rebot, rebot_cli
-from robot.run import run, run_cli
-from robot.version import get_version
+from robotide.lib.robot.rebot import rebot, rebot_cli
+from robotide.lib.robot.run import run, run_cli
+from robotide.lib.robot.version import get_version
 
 
 # Avoid warnings when using `python -m robot.run` with Python 3.5.2 or newer.
