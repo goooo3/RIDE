@@ -10,7 +10,14 @@ import wx.stc as stc
 
 # from images import Smiles
 #import Smiles  # Background, code, SmallDnArrow, SmallUpArrow
-
+try:
+    from robotide.lib.robot.utils import encoding
+except ImportError:
+    encoding = None
+if encoding:
+    encoding = encoding.SYSTEM_ENCODING  # CONSOLE_ENCODING
+else:
+    encoding = "UTF-8"
 # ----------------------------------------------------------------------
 
 demoText = """\
@@ -638,7 +645,7 @@ class DemoCodePanel(wx.Panel):
 
     def LoadDemoSource(self, source):
         self.editor.Clear()
-        self.editor.SetValue(source)
+        self.editor.SetTextRaw(source)  # DEBUG was SetValue(source)
         self.JumpToLine(0)
         self.btnSave.Enable(False)
 
@@ -694,10 +701,11 @@ class DemoCodePanel(wx.Panel):
             dlg.Destroy()
 
         # Save
-        f = open(modifiedFilename, "wt")
-        source = self.editor.GetText()
+        f = open(modifiedFilename, "wb")  # DEBUG was wt
+        source = bytearray(self.editor.GetTextRaw())  # DEBUG .GetText()
+        print(b"DEBUG: SOURCE TO WRITE\n%s" % source)
         try:
-            f.write(source)
+            f.write(source)  #.encode(encoding,"backslashreplace")))  # "backslashreplace")))
         finally:
             f.close()
 
@@ -752,7 +760,7 @@ class DemoCodePanel(wx.Panel):
                 self.log.write('           %s\n' % path)
 
             # Open
-            f = open(path, "r")
+            f = open(path, "rb")  #DEBUg was r
             try:
                 source = f.read()
             finally:
