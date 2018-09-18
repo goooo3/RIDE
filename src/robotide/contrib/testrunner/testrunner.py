@@ -59,6 +59,7 @@ except ImportError:
 if encoding:
     encoding.OUTPUT_ENCODING = 'UTF-8'
 
+print("DEBUG: imported Testrunner encoding output %s, console %s, system %s" % (encoding.OUTPUT_ENCODING,encoding.CONSOLE_ENCODING,encoding.SYSTEM_ENCODING))
 ATEXIT_LOCK = threading.RLock()
 
 
@@ -199,7 +200,7 @@ class TestRunner(object):
     def run_command(self, command, cwd):
         self._pid_to_kill = None
         self._process = Process(cwd)
-        # print("DEBUG: run_command command: %s\nCWD: %s\n" % (command, cwd))
+        print("DEBUG: run_command command: %s\nCWD: %s\n" % (command, cwd))
         self._process.run_command(command)
 
     def get_command(self, profile, pythonpath, console_width, names_to_run):
@@ -352,7 +353,7 @@ class Process(object):
         # DEBUG self._process = subprocess.Popen(command.encode(utils.SYSTEM_ENCODING),
         #                                 **subprocess_args)
         # print("DEBUG: run_command calling Subprocess: %s\nCommand: %s\n" % (subprocess_args,str(command.encode(encoding.OUTPUT_ENCODING))))
-        self._process = subprocess.Popen(command,
+        self._process = subprocess.Popen(command.encode(encoding.OUTPUT_ENCODING),
                                          **subprocess_args)  # DEBUG was .encode(encoding.OUTPUT_ENCODING) .OUTPUT_ENCODING
         # print("DEBUG: run_command Called Subprocess_args: %s\n" % subprocess_args)
         self._process.stdin.close()
